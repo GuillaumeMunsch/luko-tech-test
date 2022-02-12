@@ -41,9 +41,9 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   >;
 
 export type InventoryItem = {
-  id?: string;
+  id?: number;
   name: string;
-  value: string | number;
+  purchasePrice: string | number;
   type?: string;
   description?: string;
   photo?: string;
