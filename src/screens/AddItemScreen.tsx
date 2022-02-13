@@ -123,89 +123,99 @@ export default function AddItemScreen({
               values,
               setFieldValue,
               submitForm,
-            }) => (
-              <>
-                <View style={styles.formContainer}>
-                  <View style={styles.buttonsContainer}>
-                    <Button
-                      title="Cancel"
-                      onPress={() => navigation.goBack()}
-                    />
-                    <Button
-                      title="Add"
-                      disabled={
-                        !values.name || !values.purchasePrice || !values.photo
-                      }
-                      onPress={() => submitForm()}
-                    />
-                  </View>
-                  <View style={styles.imgBackgroundContainer}>
-                    {values.photo ? (
-                      <ImageBackground
-                        source={{ uri: values.photo }}
-                        resizeMode="cover"
-                        style={styles.pictureImageBackground}
-                        imageStyle={styles.pictureImageBackgroundImg}
-                      >
-                        <Pressable
-                          style={styles.imgDelIconContainer}
-                          onPress={() => setFieldValue('photo', '')}
-                        >
-                          <Ionicons name="trash" size={18} color="white" />
-                        </Pressable>
-                      </ImageBackground>
-                    ) : (
-                      <Pressable
-                        style={styles.pictureImageBackgroundPlaceholder}
-                        onPress={() =>
-                          selectSource((value: string) =>
-                            setFieldValue('photo', value)
-                          )
+              errors,
+              touched,
+            }) => {
+              console.log('Touched', touched);
+              return (
+                <>
+                  <View style={styles.formContainer}>
+                    <View style={styles.buttonsContainer}>
+                      <Button
+                        title="Cancel"
+                        onPress={() => navigation.goBack()}
+                      />
+                      <Button
+                        title="Add"
+                        disabled={
+                          !values.name || !values.purchasePrice || !values.photo
                         }
-                      >
-                        <Ionicons
-                          name="camera"
-                          size={44}
-                          color={colors.mainBlue}
-                        />
-                        <Text style={styles.addPhotoText}>Add Photo</Text>
-                      </Pressable>
-                    )}
+                        onPress={() => submitForm()}
+                      />
+                    </View>
+                    <View style={styles.imgBackgroundContainer}>
+                      {values.photo ? (
+                        <ImageBackground
+                          source={{ uri: values.photo }}
+                          resizeMode="cover"
+                          style={styles.pictureImageBackground}
+                          imageStyle={styles.pictureImageBackgroundImg}
+                        >
+                          <Pressable
+                            style={styles.imgDelIconContainer}
+                            onPress={() => setFieldValue('photo', '')}
+                          >
+                            <Ionicons name="trash" size={18} color="white" />
+                          </Pressable>
+                        </ImageBackground>
+                      ) : (
+                        <Pressable
+                          style={[styles.pictureImageBackgroundPlaceholder]}
+                          onPress={() =>
+                            selectSource((value: string) =>
+                              setFieldValue('photo', value)
+                            )
+                          }
+                        >
+                          <Ionicons
+                            name="camera"
+                            size={44}
+                            color={colors.mainBlue}
+                          />
+                          <Text style={styles.addPhotoText}>Add Photo</Text>
+                        </Pressable>
+                      )}
+                    </View>
+                    <CustomInput
+                      inputLabel="Name"
+                      inputProps={{
+                        onChangeText: handleChange('name'),
+                        onBlur: handleBlur('name'),
+                        value: values.name,
+                        placeholder: 'Bracelet',
+                        onSubmitEditing: Keyboard.dismiss,
+                      }}
+                      error={touched.name ? errors.name : ''}
+                    />
+                    <CustomInput
+                      inputLabel="Value"
+                      inputProps={{
+                        onChangeText: handleChange('purchasePrice'),
+                        onBlur: handleBlur('purchasePrice'),
+                        value: values.purchasePrice,
+                        placeholder: '700',
+                        keyboardType: 'decimal-pad',
+                        onSubmitEditing: Keyboard.dismiss,
+                      }}
+                      error={touched.purchasePrice ? errors.purchasePrice : ''}
+                    />
+                    <CustomInput
+                      inputLabel="Description"
+                      inputProps={{
+                        onChangeText: handleChange('description'),
+                        onBlur: handleBlur('description'),
+                        value: values.description,
+                        placeholder: 'Optional',
+                        multiline: true,
+                        style: { height: 128 },
+                      }}
+                      error={touched.description ? errors.description : ''}
+                    />
+                    <View style={{ height: 150, width: 1 }} />
                   </View>
-                  <CustomInput
-                    inputLabel="Name"
-                    inputProps={{
-                      onChangeText: handleChange('name'),
-                      onBlur: handleBlur('name'),
-                      value: values.name,
-                      placeholder: 'Bracelet',
-                    }}
-                  />
-                  <CustomInput
-                    inputLabel="Value"
-                    inputProps={{
-                      onChangeText: handleChange('purchasePrice'),
-                      onBlur: handleBlur('purchasePrice'),
-                      value: values.purchasePrice,
-                      placeholder: '700',
-                      keyboardType: 'decimal-pad',
-                    }}
-                  />
-                  <CustomInput
-                    inputLabel="Description"
-                    inputProps={{
-                      onChangeText: handleChange('description'),
-                      onBlur: handleBlur('description'),
-                      value: values.description,
-                      placeholder: 'Optional',
-                      multiline: true,
-                      style: { height: 128 },
-                    }}
-                  />
-                  <View style={{ height: 150, width: 1 }} />
-                </View>
-              </>
-            )}
+                </>
+              );
+            }}
           </Formik>
         </View>
       </TouchableWithoutFeedback>

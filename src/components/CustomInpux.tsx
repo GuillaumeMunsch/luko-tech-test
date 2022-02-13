@@ -13,7 +13,10 @@ export default function CustomInput(props: {
   inputLabel: string;
   inputProps?: TextInputProps;
   labelProps?: TextProps;
+  error?: string;
 }) {
+  console.log('Error', props.error);
+  console.log(`E: [${props.error}]`);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   return (
     <View>
@@ -23,6 +26,7 @@ export default function CustomInput(props: {
       >
         {props.inputLabel}
       </Text>
+      {props.error ? <Text style={styles.errorText}>{props.error}</Text> : null}
       <TextInput
         {...props.inputProps}
         onBlur={(e) => {
@@ -59,5 +63,10 @@ const styles = StyleSheet.create({
   textInputFocused: {
     borderColor: colors.mainBlue,
     borderWidth: 1,
+  },
+  errorText: {
+    marginVertical: 8,
+    fontWeight: 'bold',
+    color: colors.mainRed,
   },
 });
