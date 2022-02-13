@@ -15,8 +15,6 @@ export default function CustomInput(props: {
   labelProps?: TextProps;
   error?: string;
 }) {
-  console.log('Error', props.error);
-  console.log(`E: [${props.error}]`);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   return (
     <View>
