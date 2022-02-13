@@ -39,7 +39,6 @@ export default function InventoryScreen({
       addItem: (item) => setValuables([...valuables, item]),
     });
 
-  console.log('valuables', valuables);
   return (
     <View style={styles.container}>
       <Title onButtonPress={handleAddButtonPress}>{route.name}</Title>

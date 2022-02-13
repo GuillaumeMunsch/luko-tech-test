@@ -110,6 +110,7 @@ export default function AddItemScreen({
               <View style={styles.buttonsContainer}>
                 <Button title="Cancel" onPress={() => navigation.goBack()} />
                 <Button
+                  testID="addButton"
                   title="Add"
                   disabled={
                     !values.name || !values.purchasePrice || !values.photo
@@ -149,6 +150,7 @@ export default function AddItemScreen({
               <View>
                 <Text style={styles.inputLabel}>Name</Text>
                 <TextInput
+                  testID="nameInput"
                   onChangeText={handleChange('name')}
                   onBlur={handleBlur('name')}
                   value={values.name}
@@ -159,6 +161,7 @@ export default function AddItemScreen({
               <View>
                 <Text style={styles.inputLabel}>Value</Text>
                 <TextInput
+                  testID="purchasePriceInput"
                   onChangeText={handleChange('purchasePrice')}
                   onBlur={handleBlur('purchasePrice')}
                   value={values.purchasePrice}
@@ -169,6 +172,7 @@ export default function AddItemScreen({
               <View>
                 <Text style={styles.inputLabel}>Description</Text>
                 <TextInput
+                  testID="descriptionInput"
                   onChangeText={handleChange('description')}
                   onBlur={handleBlur('description')}
                   value={values.description}
