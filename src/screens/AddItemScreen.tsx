@@ -9,6 +9,10 @@ import {
   TextInput,
   View,
   Linking,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { Formik } from 'formik';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,6 +22,7 @@ import Button from '../components/Button';
 import { InventoryItem, RootTabScreenProps } from '../navigation/types';
 import { colors } from '../theme/colors';
 import { addInventoryItemValidate } from '../utils/validates';
+import CustomInput from '../components/CustomInpux';
 
 export default function AddItemScreen({
   navigation,
@@ -89,102 +94,122 @@ export default function AddItemScreen({
     ]);
 
   return (
-    <View style={styles.container}>
-      <Formik
-        initialValues={{
-          name: '',
-          purchasePrice: '',
-          photo: '',
-          description: '',
-        }}
-        onSubmit={(values) => {
-          console.log('Values', values);
-          addItem({ ...values, purchasePrice: parseInt(values.purchasePrice) });
-          navigation.goBack();
-        }}
-        validate={addInventoryItemValidate}
-      >
-        {({ handleChange, handleBlur, values, setFieldValue, submitForm }) => (
-          <>
-            <View style={styles.formContainer}>
-              <View style={styles.buttonsContainer}>
-                <Button title="Cancel" onPress={() => navigation.goBack()} />
-                <Button
-                  testID="addButton"
-                  title="Add"
-                  disabled={
-                    !values.name || !values.purchasePrice || !values.photo
-                  }
-                  onPress={() => submitForm()}
-                />
-              </View>
-              <View style={styles.imgBackgroundContainer}>
-                {values.photo ? (
-                  <ImageBackground
-                    source={{ uri: values.photo }}
-                    resizeMode="cover"
-                    style={styles.pictureImageBackground}
-                    imageStyle={styles.pictureImageBackgroundImg}
-                  >
-                    <Pressable
-                      style={styles.imgDelIconContainer}
-                      onPress={() => setFieldValue('photo', '')}
-                    >
-                      <Ionicons name="trash" size={18} color="white" />
-                    </Pressable>
-                  </ImageBackground>
-                ) : (
-                  <Pressable
-                    style={styles.pictureImageBackgroundPlaceholder}
-                    onPress={() =>
-                      selectSource((value: string) =>
-                        setFieldValue('photo', value)
-                      )
-                    }
-                  >
-                    <Ionicons name="camera" size={44} color={colors.mainBlue} />
-                    <Text style={styles.addPhotoText}>Add Photo</Text>
-                  </Pressable>
-                )}
-              </View>
-              <View>
-                <Text style={styles.inputLabel}>Name</Text>
-                <TextInput
-                  testID="nameInput"
-                  onChangeText={handleChange('name')}
-                  onBlur={handleBlur('name')}
-                  value={values.name}
-                  style={styles.textInput}
-                  placeholder="Bracelet"
-                />
-              </View>
-              <View>
-                <Text style={styles.inputLabel}>Value</Text>
-                <TextInput
-                  testID="purchasePriceInput"
-                  onChangeText={handleChange('purchasePrice')}
-                  onBlur={handleBlur('purchasePrice')}
-                  value={values.purchasePrice}
-                  style={styles.textInput}
-                  placeholder="700"
-                />
-              </View>
-              <View>
-                <Text style={styles.inputLabel}>Description</Text>
-                <TextInput
-                  testID="descriptionInput"
-                  onChangeText={handleChange('description')}
-                  onBlur={handleBlur('description')}
-                  value={values.description}
-                  style={styles.textArea}
-                  placeholder="Optional"
-                />
-              </View>
-            </View>
-          </>
-        )}
-      </Formik>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Formik
+            initialValues={{
+              name: '',
+              purchasePrice: '',
+              photo: '',
+              description: '',
+            }}
+            onSubmit={(values) => {
+              console.log('Values', values);
+              addItem({
+                ...values,
+                purchasePrice: parseInt(values.purchasePrice),
+              });
+              navigation.goBack();
+            }}
+            validate={addInventoryItemValidate}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              values,
+              setFieldValue,
+              submitForm,
+            }) => (
+              <>
+                <View style={styles.formContainer}>
+                  <View style={styles.buttonsContainer}>
+                    <Button
+                      title="Cancel"
+                      onPress={() => navigation.goBack()}
+                    />
+                    <Button
+                      title="Add"
+                      disabled={
+                        !values.name || !values.purchasePrice || !values.photo
+                      }
+                      onPress={() => submitForm()}
+                    />
+                  </View>
+                  <View style={styles.imgBackgroundContainer}>
+                    {values.photo ? (
+                      <ImageBackground
+                        source={{ uri: values.photo }}
+                        resizeMode="cover"
+                        style={styles.pictureImageBackground}
+                        imageStyle={styles.pictureImageBackgroundImg}
+                      >
+                        <Pressable
+                          style={styles.imgDelIconContainer}
+                          onPress={() => setFieldValue('photo', '')}
+                        >
+                          <Ionicons name="trash" size={18} color="white" />
+                        </Pressable>
+                      </ImageBackground>
+                    ) : (
+                      <Pressable
+                        style={styles.pictureImageBackgroundPlaceholder}
+                        onPress={() =>
+                          selectSource((value: string) =>
+                            setFieldValue('photo', value)
+                          )
+                        }
+                      >
+                        <Ionicons
+                          name="camera"
+                          size={44}
+                          color={colors.mainBlue}
+                        />
+                        <Text style={styles.addPhotoText}>Add Photo</Text>
+                      </Pressable>
+                    )}
+                  </View>
+                  <CustomInput
+                    inputLabel="Name"
+                    inputProps={{
+                      onChangeText: handleChange('name'),
+                      onBlur: handleBlur('name'),
+                      value: values.name,
+                      placeholder: 'Bracelet',
+                    }}
+                  />
+                  <CustomInput
+                    inputLabel="Value"
+                    inputProps={{
+                      onChangeText: handleChange('purchasePrice'),
+                      onBlur: handleBlur('purchasePrice'),
+                      value: values.purchasePrice,
+                      placeholder: '700',
+                      keyboardType: 'decimal-pad',
+                    }}
+                  />
+                  <CustomInput
+                    inputLabel="Description"
+                    inputProps={{
+                      onChangeText: handleChange('description'),
+                      onBlur: handleBlur('description'),
+                      value: values.description,
+                      placeholder: 'Optional',
+                      multiline: true,
+                      style: { height: 128 },
+                    }}
+                  />
+                  <View style={{ height: 150, width: 1 }} />
+                </View>
+              </>
+            )}
+          </Formik>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -194,6 +219,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: colors.background,
     paddingTop: 10,
+  },
+  inner: {
+    flex: 1,
+    justifyContent: 'space-around',
   },
   buttonsContainer: {
     width: '100%',
@@ -205,21 +234,6 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginVertical: 26,
-  },
-  inputLabel: {
-    color: colors.textBlack,
-    fontSize: 13,
-    lineHeight: 17,
-    marginTop: 20,
-    marginBottom: 5,
-  },
-  textInput: {
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    height: 48,
-    borderRadius: 10,
-    backgroundColor: 'white',
   },
   textArea: {
     paddingHorizontal: 15,
