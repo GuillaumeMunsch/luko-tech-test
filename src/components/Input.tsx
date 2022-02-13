@@ -15,17 +15,9 @@ export default function InventoryItemTeaser(
   const { item } = props;
   return (
     <View style={styles.pressableWrapper}>
-      <View style={styles.container}>
-        {item.photo && (
-          <Image style={styles.image} source={{ uri: item.photo }} />
-        )}
-        <View style={styles.textsContainer}>
-          <Text numberOfLines={2} style={styles.text} ellipsizeMode={'tail'}>
-            {item.name}
-          </Text>
-          <Text style={styles.price}>{`€${item.purchasePrice}`}</Text>
-        </View>
-      </View>
+      <Text numberOfLines={2} style={styles.text}>
+        Hello
+      </Text>
     </View>
   );
 }

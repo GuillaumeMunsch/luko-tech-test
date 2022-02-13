@@ -8,8 +8,6 @@ export default function InventoryScreen({
   navigation,
   route,
 }: RootTabScreenProps<'Inventory'>) {
-  const handleAddButtonPress = () => navigation.navigate('AddItem');
-
   const [valuables, setValuables] = useState<Items>([
     {
       id: 1,
@@ -34,23 +32,14 @@ export default function InventoryScreen({
       description: 'Gift from my mother',
       photo: 'https://i.ibb.co/znXC7LQ/marcus-lewis-U63z-XX2f7ho-unsplash.jpg',
     },
-    {
-      id: 4,
-      name: 'Guitar',
-      purchasePrice: 850,
-      type: 'MUSIC_INSTRUMENT',
-      photo: 'https://i.ibb.co/4dfndL2/louis-hansel-M-d-J-Scwa-LE-unsplash.jpg',
-    },
-    {
-      id: 5,
-      name: 'Some ring',
-      purchasePrice: 1200,
-      type: 'JEWELRY',
-      description: 'Gift from my mother',
-      photo: 'https://i.ibb.co/znXC7LQ/marcus-lewis-U63z-XX2f7ho-unsplash.jpg',
-    },
   ]);
 
+  const handleAddButtonPress = () =>
+    navigation.navigate('AddItem', {
+      addItem: (item) => setValuables([...valuables, item]),
+    });
+
+  console.log('valuables', valuables);
   return (
     <View style={styles.container}>
       <Title onButtonPress={handleAddButtonPress}>{route.name}</Title>
